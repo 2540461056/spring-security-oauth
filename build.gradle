@@ -1,0 +1,52 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.6.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+	id 'java'
+}
+
+group = 'com.csvw'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+
+repositories {
+	maven { url 'http://maven.aliyun.com/nexus/content/groups/public' }
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-oauth2', version: '2.2.1.RELEASE'
+	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.19'
+	compile group: 'org.springframework', name: 'spring-jdbc', version: '5.2.8.RELEASE'
+	compile group: 'com.zaxxer', name: 'HikariCP', version: '3.4.2'
+	compile group: 'tk.mybatis', name: 'mapper-spring-boot-starter', version: '2.1.5'
+	compile group: 'org.mybatis.generator', name: 'mybatis-generator-core', version: '1.4.0'
+	compile group: 'org.projectlombok', name: 'lombok', version: '1.18.16'
+	implementation 'org.assertj:assertj-core'
+
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	testImplementation 'org.springframework.security:spring-security-test'
+}
+
+apply plugin: 'war'
+
+processResources {
+	from('src/main/java') {
+		include '**/*'
+	}
+}
+
+task copyTask(type: Copy) {
+	from 'com/csvw/springsecurityoauth/server/mapper'
+	into 'spring-security-oauth/build/classes/java/main/com/csvw/springsecurityoauth/server/mapper'
+}
+processTestResources.dependsOn copyTask
+
+test {
+	useJUnitPlatform()
+}

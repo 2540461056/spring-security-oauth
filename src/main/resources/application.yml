@@ -1,0 +1,31 @@
+debug: true
+spring:
+  application:
+    name: oauth2-server
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbc-url: jdbc:mysql://127.0.0.1:3306/roll?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: zzfroot1.
+    hikari:
+      minimum-idle: 5
+      idle-timeout: 600000
+      maximum-pool-size: 10
+      auto-commit: true
+      pool-name: MyHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+server:
+  port: 8080
+
+mybatis:
+  type-aliases-package: com.csvw.springsecurityoauth.server.domain
+
+security:
+  oauth2:
+    authorization:
+      check-token-access: http://localhost:8080/oauth/check_token
+    resource:
+      token-info-uri:
